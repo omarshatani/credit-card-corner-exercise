@@ -1,23 +1,25 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import { ThemedView } from "@/components/ThemedView";
 import { DismissableBox } from "@/components/DismissableBox";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useSecureStore } from "@/hooks/useSecureStore";
-import { SecureStoreKey } from "@/constants/SecureStoreKey";
+import { useLocalStore } from "@/hooks/useLocalStore";
+import { LocalStorageKey } from "@/constants/LocalStorageKey";
 import { ConfirmActionModal } from "@/components/ConfirmActionModal";
 
 export const HomeScreen = () => {
   const [isBoxVisible, setIsBoxVisible] = React.useState(false);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
-  const { get, set } = useSecureStore();
+  const { get, set } = useLocalStore();
   const insets = useSafeAreaInsets();
 
   React.useEffect(() => {
     (async () => {
-      const shouldHideBox = await get(SecureStoreKey.MODAL_DISMISS);
-      if (!!shouldHideBox) {
-        setIsBoxVisible(false);
+      const shouldHideBox = await get(LocalStorageKey.MODAL_DISMISS);
+      if (Boolean(shouldHideBox)) {
+        hideBox();
+      } else {
+        showBox();
       }
     })();
   }, []);
@@ -28,36 +30,48 @@ export const HomeScreen = () => {
   };
   const hideBox = () => setIsBoxVisible(false);
   const hideModal = () => setIsModalVisible(false);
+  const showBox = () => setIsBoxVisible(true);
   const showModal = () => setIsModalVisible(true);
   const hideBoxPermanently = () => {
-    set(SecureStoreKey.MODAL_DISMISS, "true");
+    set(LocalStorageKey.MODAL_DISMISS, "true");
     hideBoxAndModal();
   };
 
   return (
-    <>
-      <ThemedView
-        style={[
-          styles.container,
-          { paddingTop: insets.top, paddingBottom: insets.bottom },
-        ]}
-      >
-        {isBoxVisible && (
-          <DismissableBox title={"ciao"} onDismiss={showModal} />
-        )}
-      </ThemedView>
-      <ConfirmActionModal
-        isVisible={isModalVisible}
-        onConfirm={hideBoxPermanently}
-        onDismiss={hideBoxAndModal}
-      />
-    </>
+    <ThemedView
+      style={[
+        styles.container,
+        { paddingTop: insets.top, paddingBottom: insets.bottom },
+      ]}
+    >
+      <View style={styles.content}>
+        <View>
+          {isBoxVisible && (
+            <DismissableBox title={"ciao"} onDismiss={showModal} />
+          )}
+        </View>
+        <ConfirmActionModal
+          isVisible={isModalVisible}
+          onConfirm={hideBoxPermanently}
+          onDismiss={hideBoxAndModal}
+        />
+      </View>
+    </ThemedView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  content: {
     paddingHorizontal: 16,
+    ...Platform.select({
+      web: {
+        width: "70%",
+        marginVertical: 0,
+        marginHorizontal: "auto",
+      },
+    }),
   },
 });
