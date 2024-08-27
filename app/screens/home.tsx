@@ -14,6 +14,9 @@ import { LayoutChangeEvent } from "react-native/Libraries/Types/CoreEventTypes";
 import { TransactionsList } from "@/components/TransactionsList";
 import { getAllTransactions } from "@/api/repository/TransactionRepository";
 import { Transaction } from "@/api/models/Transaction";
+import { getCreditCardInfo } from "@/api/repository/CreditCardRepository";
+import { CreditCardInfo } from "@/api/models/CreditCardInfo";
+import { SplashScreen } from "expo-router";
 import { useThemeColor } from "@/hooks/useThemeColor";
 
 export const HomeScreen = () => {
@@ -21,6 +24,7 @@ export const HomeScreen = () => {
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [inboxMessage, setInboxMessage] = React.useState<InboxMessage>();
   const [transactions, setTransactions] = React.useState<Transaction[]>([]);
+  const [creditCardInfo, setCreditCardInfo] = React.useState<CreditCardInfo>();
   const [creditCardWidth, setCreditCardWidth] = React.useState(0);
   const { get, set } = useLocalStore();
   const insets = useSafeAreaInsets();
@@ -41,15 +45,16 @@ export const HomeScreen = () => {
 
   React.useEffect(() => {
     (async () => {
-      const inboxMessage = await getLatestInboxMessage();
-      setInboxMessage(inboxMessage);
-    })();
-  }, []);
-
-  React.useEffect(() => {
-    (async () => {
-      const transactions = await getAllTransactions();
+      const [inboxMessage, transactions, creditCardInfo] = await Promise.all([
+        getLatestInboxMessage(),
+        getAllTransactions(),
+        getCreditCardInfo(),
+      ]);
       setTransactions(transactions);
+      setInboxMessage(inboxMessage);
+      setCreditCardInfo(creditCardInfo);
+      // Hide SplashScreen when all calls received a result
+      SplashScreen.hideAsync();
     })();
   }, []);
 
@@ -91,25 +96,22 @@ export const HomeScreen = () => {
         stickyHeaderIndices={[1]}
         showsVerticalScrollIndicator={false}
       >
-        <CreditCard
-          onLayout={onCreditCardLayout}
-          uri={
-            "https://pearl.cdn.cornercard.ch/static/cop-ch/cross/images/cards/big/MASTERCARD_GOLD_CORNER.PNG"
-          }
-        />
-        {!!creditCardWidth && (
+        <CreditCard onLayout={onCreditCardLayout} uri={creditCardInfo?.image} />
+        {!!creditCardWidth && creditCardInfo && (
           <CreditCardOverlay
-            style={{
-              alignSelf: "center",
-              width: creditCardWidth,
-            }}
-            availability={"1000"}
-            expenses={"1000"}
-            cardNumber={"4323231232131232"}
+            style={[
+              styles.overlay,
+              {
+                width: creditCardWidth,
+              },
+            ]}
+            availability={creditCardInfo.availability.amount}
+            currency={creditCardInfo.availability.currency}
+            expenses={creditCardInfo.expenses.amount}
+            cardNumber={creditCardInfo.cardNumber}
           />
         )}
         <TransactionsList transactions={transactions} />
-
         <ConfirmActionModal
           isVisible={isModalVisible}
           onConfirm={hideBoxPermanently}
@@ -133,5 +135,8 @@ const styles = StyleSheet.create({
         marginHorizontal: "auto",
       },
     }),
+  },
+  overlay: {
+    alignSelf: "center",
   },
 });
