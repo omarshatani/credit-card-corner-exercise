@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ThemedText } from "@/components/ThemedText";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { Shadows } from "@/constants/Shadows";
 
 interface DismissableBoxProps {
   title: string;
@@ -43,6 +44,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 24,
     marginVertical: 16,
+    ...Shadows,
   },
   hitSlop: {
     top: 20,
