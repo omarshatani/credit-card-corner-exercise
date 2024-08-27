@@ -9,11 +9,13 @@ interface CreditCardOverlayProps {
   availability: string;
   expenses: string;
   cardNumber: string;
+  currency: string;
   style?: StyleProp<ViewStyle>;
 }
 
 export const CreditCardOverlay = ({
   availability,
+  currency,
   expenses,
   cardNumber,
   style,
@@ -23,12 +25,16 @@ export const CreditCardOverlay = ({
     <ShadowedView style={[styles.container, style]}>
       <ThemedView style={styles.content}>
         <ThemedView style={styles.section}>
-          <ThemedText>Availability</ThemedText>
-          <ThemedText style={styles.text}>{availability}</ThemedText>
+          <ThemedText type={"defaultSemiBold"}>Availability</ThemedText>
+          <ThemedText style={styles.text}>
+            {availability} {currency}
+          </ThemedText>
         </ThemedView>
         <ThemedView style={styles.section}>
-          <ThemedText>Expenses</ThemedText>
-          <ThemedText style={styles.text}>{expenses}</ThemedText>
+          <ThemedText type={"defaultSemiBold"}>Expenses</ThemedText>
+          <ThemedText style={styles.text}>
+            {expenses} {currency}
+          </ThemedText>
         </ThemedView>
       </ThemedView>
       <ThemedText style={styles.text}>
