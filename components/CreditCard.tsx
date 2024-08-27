@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     width: CARD_WIDTH,
     borderRadius: 8,
     backgroundColor: "transparent",
+    marginBottom: -(CARD_HEIGHT / 2) + 16,
   },
   image: {
     flex: 1,
