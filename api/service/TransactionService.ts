@@ -1,5 +1,5 @@
+import TRANSACTIONS_JSON from "@/api/response/transactions.json";
 import { Transaction } from "@/api/models/Transaction";
-import TRANSACTIONS_JSON from "../mocks/transactions.json";
 
 export const getTransactions = (): Promise<Transaction[]> => {
   return new Promise((resolve) => {

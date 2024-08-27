@@ -1,4 +1,4 @@
-import INBOX_JSON from "../mocks/inbox.json";
+import INBOX_JSON from "@/api/response/inbox.json";
 import { InboxMessage } from "@/api/models/InboxMessage";
 
 export const getInboxMessages = (): Promise<InboxMessage[]> => {
