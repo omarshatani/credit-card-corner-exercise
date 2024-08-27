@@ -1,10 +1,9 @@
-import { Button, FlatList, Platform, StyleSheet, View } from "react-native";
-import { Transaction } from "@/api/models/Transaction";
 import React from "react";
+import { Button, StyleSheet } from "react-native";
+import { Transaction } from "@/api/models/Transaction";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
 import { Colors } from "@/constants/Colors";
-import { Shadows } from "@/constants/Shadows";
 import { ShadowedView } from "@/components/ShadowedView";
 
 interface TransactionsListProps {
