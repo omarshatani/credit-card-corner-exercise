@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { Pressable, StyleSheet, TouchableOpacity } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ThemedText } from "@/components/ThemedText";
 import { useThemeColor } from "@/hooks/useThemeColor";
@@ -20,17 +20,21 @@ export const DismissableBox = ({ title, onDismiss }: DismissableBoxProps) => {
   };
 
   return (
-    <TouchableOpacity
-      style={[
+    <Pressable
+      style={(state) => [
         styles.container,
-        { display: isVisible ? "flex" : "none", borderColor: color },
+        {
+          display: isVisible ? "flex" : "none",
+          borderColor: color,
+          opacity: state.pressed ? 0.8 : 1,
+        },
       ]}
     >
       <ThemedText>{title}</ThemedText>
       <TouchableOpacity onPress={dismiss} hitSlop={styles.hitSlop}>
         <Ionicons name="close" size={24} color={color} />
       </TouchableOpacity>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

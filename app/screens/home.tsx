@@ -72,17 +72,19 @@ export const HomeScreen = () => {
 
   return (
     <ThemedView
-      style={{
-        flex: 1,
-        paddingTop: insets?.top || 16,
-        paddingBottom: insets?.bottom || 16,
-      }}
+      style={[
+        styles.container,
+        {
+          paddingTop: insets?.top || 16,
+          paddingBottom: insets?.bottom || 16,
+        },
+      ]}
     >
       {shouldShowBox && (
         <DismissableBox title={inboxMessage.title} onDismiss={showModal} />
       )}
       <ScrollView
-        contentContainerStyle={styles.container}
+        contentContainerStyle={styles.scrollViewContainer}
         style={{
           backgroundColor: themeColor,
         }}
@@ -120,15 +122,16 @@ export const HomeScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingHorizontal: 16,
+  },
+  scrollViewContainer: {
+    paddingHorizontal: 8,
     ...Platform.select({
       web: {
         width: "70%",
         marginHorizontal: "auto",
       },
     }),
-  },
-  content: {
-    paddingHorizontal: 8,
   },
 });
