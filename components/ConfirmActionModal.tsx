@@ -1,7 +1,9 @@
 import Modal from "react-native-modal";
 import { ThemedText } from "@/components/ThemedText";
-import { Button, Platform, StyleSheet, View } from "react-native";
+import { Platform, Pressable, StyleSheet } from "react-native";
+import { ThemedView } from "@/components/ThemedView";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { ShadowedView } from "@/components/ShadowedView";
 
 interface ConfirmActionModal {
   isVisible: boolean;
@@ -14,22 +16,36 @@ export const ConfirmActionModal = ({
   onConfirm,
   onDismiss,
 }: ConfirmActionModal) => {
-  const color = useThemeColor({}, "background");
+  const backgroundColor = useThemeColor({}, "background");
   return (
     <Modal
       isVisible={isVisible}
       style={styles.modal}
       onBackdropPress={onDismiss}
     >
-      <View style={[styles.content, { backgroundColor: color }]}>
-        <ThemedText type={"title"}>
+      <ThemedView style={[styles.content, { backgroundColor }]}>
+        <ThemedText type={"subtitle"}>
           Do you want to hide this box permanently?
         </ThemedText>
-        <View style={styles.ctaContainer}>
-          <Button color={color} title={"Yes"} onPress={onConfirm} />
-          <Button color={color} title={"No"} onPress={onDismiss} />
-        </View>
-      </View>
+        <ThemedView style={styles.ctaContainer}>
+          <Pressable
+            style={(state) => [{ opacity: state.pressed ? 0.8 : 1 }]}
+            onPress={onConfirm}
+          >
+            <ShadowedView style={styles.cta}>
+              <ThemedText>Yes</ThemedText>
+            </ShadowedView>
+          </Pressable>
+          <Pressable
+            style={(state) => [{ opacity: state.pressed ? 0.8 : 1 }]}
+            onPress={onDismiss}
+          >
+            <ShadowedView style={styles.cta}>
+              <ThemedText>No</ThemedText>
+            </ShadowedView>
+          </Pressable>
+        </ThemedView>
+      </ThemedView>
     </Modal>
   );
 };
@@ -47,16 +63,20 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   ctaContainer: {
+    marginVertical: 16,
+    gap: 8,
+    flexDirection: "row",
+    // alignItems: "center",
+    justifyContent: "center",
     ...Platform.select({
       web: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
         marginVertical: 8,
       },
     }),
   },
   cta: {
-    width: 200,
+    width: 100,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

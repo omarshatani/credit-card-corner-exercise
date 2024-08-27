@@ -65,7 +65,7 @@ const Separator = () => <ThemedView style={styles.separator} />;
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 4,
+    marginVertical: 16,
   },
   showAll: {
     width: 100,
