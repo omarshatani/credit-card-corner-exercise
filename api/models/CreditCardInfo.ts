@@ -1,4 +1,4 @@
-export interface CreditCard {
+export interface CreditCardInfo {
   id: string;
   image: string;
   availability: Amount;
