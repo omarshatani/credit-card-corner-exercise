@@ -44,7 +44,7 @@ export const HomeScreen = () => {
         showBox();
       }
     })();
-  }, []);
+  }, [get]);
 
   React.useEffect(() => {
     (async () => {

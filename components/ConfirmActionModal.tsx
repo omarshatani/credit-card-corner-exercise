@@ -5,7 +5,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { ThemedButtonWithShadow } from "@/components/ThemedButtonWithShadow";
 
-interface ConfirmActionModal {
+interface ConfirmActionModalProps {
   isVisible: boolean;
   onConfirm: () => void;
   onDismiss: () => void;
@@ -15,7 +15,7 @@ export const ConfirmActionModal = ({
   isVisible,
   onConfirm,
   onDismiss,
-}: ConfirmActionModal) => {
+}: ConfirmActionModalProps) => {
   const backgroundColor = useThemeColor({}, "background");
   return (
     <Modal
