@@ -1,9 +1,9 @@
 import Modal from "react-native-modal";
 import { ThemedText } from "@/components/ThemedText";
-import { Platform, Pressable, StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { ThemedView } from "@/components/ThemedView";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { ShadowedView } from "@/components/ShadowedView";
+import { ThemedButtonWithShadow } from "@/components/ThemedButtonWithShadow";
 
 interface ConfirmActionModal {
   isVisible: boolean;
@@ -28,22 +28,12 @@ export const ConfirmActionModal = ({
           Do you want to hide this box permanently?
         </ThemedText>
         <ThemedView style={styles.ctaContainer}>
-          <Pressable
-            style={(state) => [{ opacity: state.pressed ? 0.8 : 1 }]}
-            onPress={onConfirm}
-          >
-            <ShadowedView style={styles.cta}>
-              <ThemedText>Yes</ThemedText>
-            </ShadowedView>
-          </Pressable>
-          <Pressable
-            style={(state) => [{ opacity: state.pressed ? 0.8 : 1 }]}
-            onPress={onDismiss}
-          >
-            <ShadowedView style={styles.cta}>
-              <ThemedText>No</ThemedText>
-            </ShadowedView>
-          </Pressable>
+          <ThemedButtonWithShadow onPress={onConfirm}>
+            Yes
+          </ThemedButtonWithShadow>
+          <ThemedButtonWithShadow onPress={onDismiss}>
+            No
+          </ThemedButtonWithShadow>
         </ThemedView>
       </ThemedView>
     </Modal>
@@ -57,7 +47,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   content: {
-    backgroundColor: "white",
     padding: 24,
     borderRadius: 8,
     width: "100%",
@@ -66,7 +55,6 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     gap: 8,
     flexDirection: "row",
-    // alignItems: "center",
     justifyContent: "center",
     ...Platform.select({
       web: {
