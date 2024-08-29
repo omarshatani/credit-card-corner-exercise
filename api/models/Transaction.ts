@@ -1,3 +1,8 @@
+export enum TransactionStatus {
+  PENDING = "PENDING",
+  SETTLED = "SETTLED",
+}
+
 export interface Transaction {
   id: string;
   amount: string;
@@ -5,5 +10,5 @@ export interface Transaction {
   date: string;
   location: string;
   merchant: string;
-  status: string;
+  status: TransactionStatus;
 }

@@ -1,8 +1,12 @@
-import { Transaction } from "@/api/models/Transaction";
+import { Transaction, TransactionStatus } from "@/api/models/Transaction";
+import { TransactionRaw } from "@/api/models/raw/TransactionRaw";
 
-export const adaptTransactions = (transactions: Transaction[]): Transaction[] =>
-  transactions.map((transaction: Transaction) => ({
+export const adaptTransactions = (
+  transactions: TransactionRaw[],
+): Transaction[] =>
+  transactions.map((transaction: TransactionRaw) => ({
     ...transaction,
+    status: transaction.status as TransactionStatus,
     date: adaptDate(transaction.date),
   }));
 

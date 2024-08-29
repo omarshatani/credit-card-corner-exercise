@@ -1,7 +1,7 @@
 import TRANSACTIONS_JSON from "@/api/response/transactions.json";
-import { Transaction } from "@/api/models/Transaction";
+import { TransactionRaw } from "@/api/models/raw/TransactionRaw";
 
-export const getTransactions = (): Promise<Transaction[]> => {
+export const getTransactions = (): Promise<TransactionRaw[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       return resolve(TRANSACTIONS_JSON);
