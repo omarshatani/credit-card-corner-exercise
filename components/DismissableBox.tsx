@@ -7,10 +7,15 @@ import { ShadowedView } from "@/components/ShadowedView";
 
 interface DismissableBoxProps {
   title: string;
+  onPress?: () => void;
   onDismiss?: () => void;
 }
 
-export const DismissableBox = ({ title, onDismiss }: DismissableBoxProps) => {
+export const DismissableBox = ({
+  title,
+  onPress,
+  onDismiss,
+}: DismissableBoxProps) => {
   const [isVisible, setVisible] = React.useState(true);
   const color = useThemeColor({}, "text");
 
@@ -33,6 +38,7 @@ export const DismissableBox = ({ title, onDismiss }: DismissableBoxProps) => {
             opacity: state.pressed ? 0.8 : 1,
           },
         ]}
+        onPress={onPress}
       >
         <ThemedText>{title}</ThemedText>
         <TouchableOpacity onPress={dismiss} hitSlop={styles.hitSlop}>
@@ -46,15 +52,15 @@ export const DismissableBox = ({ title, onDismiss }: DismissableBoxProps) => {
 const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
-    borderRadius: 8,
-    padding: 24,
     marginVertical: 16,
+    borderRadius: 8,
   },
   content: {
+    flex: 1,
     flexDirection: "row",
-    width: "100%",
     justifyContent: "space-between",
     alignItems: "center",
+    padding: 24,
   },
   hitSlop: {
     top: 20,
