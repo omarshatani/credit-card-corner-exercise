@@ -24,18 +24,16 @@ export const CreditCardOverlay = ({
   return (
     <ShadowedView style={[styles.container, style]}>
       <ThemedView style={styles.content}>
-        <ThemedView style={styles.section}>
-          <ThemedText type={"defaultSemiBold"}>Availability</ThemedText>
-          <ThemedText style={styles.text}>
-            {availability} {currency}
-          </ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.section}>
-          <ThemedText type={"defaultSemiBold"}>Expenses</ThemedText>
-          <ThemedText style={styles.text}>
-            {expenses} {currency}
-          </ThemedText>
-        </ThemedView>
+        <OverlaySection
+          title={"Availability"}
+          amount={availability}
+          currency={currency}
+        />
+        <OverlaySection
+          title="Expenses"
+          amount={expenses}
+          currency={currency}
+        />
       </ThemedView>
       <ThemedText style={styles.text}>
         **** **** **** {lastFourDigits}
@@ -43,6 +41,23 @@ export const CreditCardOverlay = ({
     </ShadowedView>
   );
 };
+
+const OverlaySection = ({
+  title,
+  amount,
+  currency,
+}: {
+  title: string;
+  amount: string;
+  currency: string;
+}) => (
+  <ThemedView style={styles.section}>
+    <ThemedText type={"defaultSemiBold"}>{title}</ThemedText>
+    <ThemedText style={styles.text}>
+      {amount} {currency}
+    </ThemedText>
+  </ThemedView>
+);
 
 const styles = StyleSheet.create({
   container: {
