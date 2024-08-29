@@ -18,10 +18,13 @@ import { getCreditCardInfo } from "@/api/repository/CreditCardRepository";
 import { CreditCardInfo } from "@/api/models/CreditCardInfo";
 import { SplashScreen } from "expo-router";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { InboxMessageModal } from "@/components/InboxMessageModal";
 
 export const HomeScreen = () => {
   const [isBoxVisible, setIsBoxVisible] = React.useState(false);
-  const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const [isConfirmModalVisible, setIsConfirmModalVisible] =
+    React.useState(false);
+  const [isInboxModalVisible, setIsInboxModalVisible] = React.useState(false);
   const [inboxMessage, setInboxMessage] = React.useState<InboxMessage>();
   const [transactions, setTransactions] = React.useState<Transaction[]>([]);
   const [creditCardInfo, setCreditCardInfo] = React.useState<CreditCardInfo>();
@@ -59,17 +62,23 @@ export const HomeScreen = () => {
   }, []);
 
   const hideBoxAndModal = () => {
-    hideModal();
+    hideConfirmModal();
     hideBox();
   };
+
   const hideBox = () => setIsBoxVisible(false);
-  const hideModal = () => setIsModalVisible(false);
+  const hideConfirmModal = () => setIsConfirmModalVisible(false);
+  const hideInboxModal = () => setIsInboxModalVisible(false);
+
   const showBox = () => setIsBoxVisible(true);
-  const showModal = () => setIsModalVisible(true);
+  const showConfirmModal = () => setIsConfirmModalVisible(true);
+  const showInboxModal = () => setIsInboxModalVisible(true);
+
   const hideBoxPermanently = () => {
     set(LocalStorageKey.MODAL_DISMISS, "true");
     hideBoxAndModal();
   };
+
   const onCreditCardLayout = (event: LayoutChangeEvent) => {
     const width = event.nativeEvent?.layout?.width;
     setCreditCardWidth(width);
@@ -86,7 +95,11 @@ export const HomeScreen = () => {
       ]}
     >
       {shouldShowBox && (
-        <DismissableBox title={inboxMessage.title} onDismiss={showModal} />
+        <DismissableBox
+          title={inboxMessage.title}
+          onPress={showInboxModal}
+          onDismiss={showConfirmModal}
+        />
       )}
       <ScrollView
         contentContainerStyle={styles.scrollViewContainer}
@@ -113,10 +126,19 @@ export const HomeScreen = () => {
         )}
         <TransactionsList transactions={transactions} />
         <ConfirmActionModal
-          isVisible={isModalVisible}
+          isVisible={isConfirmModalVisible}
           onConfirm={hideBoxPermanently}
           onDismiss={hideBoxAndModal}
         />
+        {inboxMessage && (
+          <InboxMessageModal
+            isVisible={isInboxModalVisible}
+            title={inboxMessage?.title}
+            message={inboxMessage?.message}
+            date={inboxMessage?.timestamp}
+            onClose={hideInboxModal}
+          />
+        )}
       </ScrollView>
     </ThemedView>
   );
