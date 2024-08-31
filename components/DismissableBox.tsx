@@ -1,5 +1,5 @@
 import React from "react";
-import { Pressable, StyleSheet, TouchableOpacity } from "react-native";
+import { Platform, Pressable, StyleSheet } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ThemedText } from "@/components/ThemedText";
 import { useThemeColor } from "@/hooks/useThemeColor";
@@ -7,29 +7,29 @@ import { ShadowedView } from "@/components/ShadowedView";
 
 interface DismissableBoxProps {
   title: string;
+  isVisible: boolean;
   onPress?: () => void;
   onDismiss?: () => void;
+  testID?: string;
 }
 
 export const DismissableBox = ({
   title,
+  isVisible,
   onPress,
   onDismiss,
+  testID = "",
 }: DismissableBoxProps) => {
-  const [isVisible, setVisible] = React.useState(true);
   const color = useThemeColor({}, "text");
 
-  const dismiss = () => {
-    setVisible(false);
-    onDismiss && onDismiss();
-  };
+  if (!isVisible) {
+    return null;
+  }
 
   return (
     <ShadowedView
-      style={[
-        styles.container,
-        { display: isVisible ? "flex" : "none", borderColor: color },
-      ]}
+      style={[styles.container, { borderColor: color }]}
+      testID={`${testID}DismissableBox`}
     >
       <Pressable
         style={(state) => [
@@ -39,11 +39,17 @@ export const DismissableBox = ({
           },
         ]}
         onPress={onPress}
+        testID={`${testID}DismissableBoxContent`}
       >
-        <ThemedText>{title}</ThemedText>
-        <TouchableOpacity onPress={dismiss} hitSlop={styles.hitSlop}>
+        <ThemedText testID={`${testID}DismissableBoxTitle`}>{title}</ThemedText>
+        <Pressable
+          onPress={onDismiss}
+          hitSlop={styles.hitSlop}
+          style={(state) => ({ opacity: state.pressed ? 0.8 : 1 })}
+          testID={`${testID}DismissableBoxCloseIcon`}
+        >
           <Ionicons name="close" size={24} color={color} />
-        </TouchableOpacity>
+        </Pressable>
       </Pressable>
     </ShadowedView>
   );
@@ -54,6 +60,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginVertical: 16,
     borderRadius: 8,
+    ...Platform.select({
+      web: {
+        marginTop: 8,
+        marginBottom: 24,
+      },
+    }),
   },
   content: {
     flex: 1,
