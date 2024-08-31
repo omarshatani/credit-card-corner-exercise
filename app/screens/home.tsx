@@ -44,7 +44,7 @@ export const HomeScreen = () => {
         showBox();
       }
     })();
-  }, [get]);
+  }, []);
 
   React.useEffect(() => {
     (async () => {
@@ -96,6 +96,7 @@ export const HomeScreen = () => {
     >
       {shouldShowBox && (
         <DismissableBox
+          isVisible={isBoxVisible}
           title={inboxMessage.title}
           onPress={showInboxModal}
           onDismiss={showConfirmModal}
@@ -133,9 +134,9 @@ export const HomeScreen = () => {
         {inboxMessage && (
           <InboxMessageModal
             isVisible={isInboxModalVisible}
-            title={inboxMessage?.title}
-            message={inboxMessage?.message}
-            date={inboxMessage?.timestamp}
+            title={inboxMessage.title}
+            message={inboxMessage.message}
+            date={inboxMessage.timestamp}
             onClose={hideInboxModal}
           />
         )}
