@@ -68,15 +68,19 @@ const TransactionItem = ({
     }
   };
   return (
-    <ShadowedView style={styles.itemContainer} testID={testID}>
-      <ThemedView style={styles.row}>
+    <ShadowedView
+      style={styles.itemContainer}
+      testID={testID}
+      darkColor={"#808080"}
+    >
+      <ThemedView style={styles.row} darkColor={"#808080"}>
         <ThemedText testID={`${testID}Merchant`}>{merchant}</ThemedText>
         <ThemedText testID={`${testID}AmountAndCurrency`}>
           {amount} {currency}
         </ThemedText>
       </ThemedView>
       <Separator />
-      <ThemedView style={styles.row}>
+      <ThemedView style={styles.row} darkColor={"#808080"}>
         <ThemedText testID={`${testID}LocationAndDate`}>
           {location}, {date}
         </ThemedText>
