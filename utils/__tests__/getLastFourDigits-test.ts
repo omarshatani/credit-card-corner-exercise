@@ -1,4 +1,3 @@
-import { it, expect, describe } from "@jest/globals";
 import { getLastFourDigits } from "@/utils/getLastFourDigits";
 
 describe("getLastFourDigits", () => {
