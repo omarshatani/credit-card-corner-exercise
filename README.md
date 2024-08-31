@@ -23,16 +23,16 @@ In the output, you'll find options to open the app in a
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-3. Run the app in iOS, Android or web
+3. Build and run on simulator
 
    ```bash
-   npx expo run ios
+   npx expo run:ios
    ```
    ```bash
-   npx expo run android
+   npx expo run:android
    ```
    ```bash
-   npx expo run web
+   npx expo run:web
    ```
 
 This project uses [file-based routing](https://docs.expo.dev/router/introduction).
