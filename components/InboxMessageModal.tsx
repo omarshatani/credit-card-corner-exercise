@@ -11,6 +11,7 @@ interface InboxMessageModalProps {
   message: string;
   date: string;
   onClose?: () => void;
+  testID?: string;
 }
 
 export const InboxMessageModal = ({
@@ -19,15 +20,27 @@ export const InboxMessageModal = ({
   message,
   date,
   onClose,
+  testID = "",
 }: InboxMessageModalProps) => (
-  <Modal isVisible={isVisible} style={styles.modal} onBackdropPress={onClose}>
-    <ThemedView style={styles.content}>
-      <ThemedText style={styles.title}>{title}</ThemedText>
-      <ThemedText style={styles.date}>
+  <Modal
+    isVisible={isVisible}
+    style={styles.modal}
+    onBackdropPress={onClose}
+    testID={`${testID}InboxModal`}
+  >
+    <ThemedView style={styles.content} testID={`${testID}InboxModalContent`}>
+      <ThemedText style={styles.title} testID={`${testID}InboxModalTitle`}>
+        {title}
+      </ThemedText>
+      <ThemedText style={styles.date} testID={`${testID}InboxModalDate`}>
         {new Date(date).toUTCString()}
       </ThemedText>
-      <ThemedText>{message}</ThemedText>
-      <ThemedButtonWithShadow style={styles.cta} onPress={onClose}>
+      <ThemedText testID={`${testID}InboxModalMessage`}>{message}</ThemedText>
+      <ThemedButtonWithShadow
+        style={styles.cta}
+        onPress={onClose}
+        testID={`${testID}InboxModalCloseCta`}
+      >
         Close
       </ThemedButtonWithShadow>
     </ThemedView>
