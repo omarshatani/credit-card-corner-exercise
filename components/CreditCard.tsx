@@ -22,23 +22,34 @@ export const CreditCard = ({
   style,
   onLoad,
   onLayout,
-}: CreditCardProps) => (
-  <ShadowedView style={styles.container} onLayout={onLayout}>
-    <Image
-      onLoad={onLoad}
-      style={[
-        styles.image,
-        {
-          height: CARD_HEIGHT,
-        },
-        style,
-      ]}
-      source={{
-        uri,
-      }}
-    />
-  </ShadowedView>
-);
+}: CreditCardProps) => {
+  if (!uri) {
+    return null;
+  }
+
+  return (
+    <ShadowedView
+      style={styles.container}
+      onLayout={onLayout}
+      testID={"CreditCard"}
+    >
+      <Image
+        onLoad={onLoad}
+        style={[
+          styles.image,
+          {
+            height: CARD_HEIGHT,
+          },
+          style,
+        ]}
+        source={{
+          uri,
+        }}
+        testID={"CreditCardImage"}
+      />
+    </ShadowedView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
