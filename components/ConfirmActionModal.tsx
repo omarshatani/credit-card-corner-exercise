@@ -9,12 +9,14 @@ interface ConfirmActionModalProps {
   isVisible: boolean;
   onConfirm: () => void;
   onDismiss: () => void;
+  testID?: string;
 }
 
 export const ConfirmActionModal = ({
   isVisible,
   onConfirm,
   onDismiss,
+  testID = "",
 }: ConfirmActionModalProps) => {
   const backgroundColor = useThemeColor({}, "background");
   return (
@@ -22,16 +24,26 @@ export const ConfirmActionModal = ({
       isVisible={isVisible}
       style={styles.modal}
       onBackdropPress={onDismiss}
+      testID={`${testID}ConfirmActionModal`}
     >
-      <ThemedView style={[styles.content, { backgroundColor }]}>
+      <ThemedView
+        style={[styles.content, { backgroundColor }]}
+        testID={`${testID}ConfirmActionModalContent`}
+      >
         <ThemedText type={"subtitle"}>
           Do you want to hide this box permanently?
         </ThemedText>
         <ThemedView style={styles.ctaContainer}>
-          <ThemedButtonWithShadow onPress={onConfirm}>
+          <ThemedButtonWithShadow
+            onPress={onConfirm}
+            testID={`${testID}ConfirmActionModalConfirmCta`}
+          >
             Yes
           </ThemedButtonWithShadow>
-          <ThemedButtonWithShadow onPress={onDismiss}>
+          <ThemedButtonWithShadow
+            onPress={onDismiss}
+            testID={`${testID}ConfirmActionModalDismissCta`}
+          >
             No
           </ThemedButtonWithShadow>
         </ThemedView>
