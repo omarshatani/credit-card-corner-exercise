@@ -1,5 +1,5 @@
-import { ThemedView } from "@/components/ThemedView";
-import { StyleSheet, ViewProps } from "react-native";
+import { ThemedView, ThemedViewProps } from "@/components/ThemedView";
+import { StyleSheet } from "react-native";
 import { Shadows } from "@/constants/Shadows";
 import { PropsWithChildren } from "react";
 
@@ -8,7 +8,7 @@ export const ShadowedView = ({
   style,
   testID = "",
   ...props
-}: PropsWithChildren & ViewProps) => (
+}: PropsWithChildren & ThemedViewProps) => (
   <ThemedView
     {...props}
     style={[styles.shadow, style]}

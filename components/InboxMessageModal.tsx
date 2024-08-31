@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "react-native-modal";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedButtonWithShadow } from "@/components/ThemedButtonWithShadow";
@@ -68,7 +68,11 @@ const styles = StyleSheet.create({
   },
   cta: {
     minWidth: 140,
-    alignSelf: "center",
     marginVertical: 8,
+    ...Platform.select({
+      web: {
+        alignSelf: "center",
+      },
+    }),
   },
 });
