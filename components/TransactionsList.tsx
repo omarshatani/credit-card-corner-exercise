@@ -1,17 +1,21 @@
 import React from "react";
 import { Button, StyleSheet } from "react-native";
+import { Colors } from "@/constants/Colors";
 import { Transaction } from "@/api/models/Transaction";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
-import { Colors } from "@/constants/Colors";
 import { ShadowedView } from "@/components/ShadowedView";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import { useColorScheme } from "@/hooks/useColorScheme";
 
 interface TransactionsListProps {
   transactions: Transaction[];
+  testID?: string;
 }
 
 export const TransactionsList = ({
   transactions = [],
+  testID = "",
 }: TransactionsListProps) => {
   const [showAll, setShowAll] = React.useState(false);
 
@@ -19,17 +23,26 @@ export const TransactionsList = ({
     setShowAll(!showAll);
   };
 
+  if (!transactions.length) {
+    return null;
+  }
+
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={styles.container} testID={testID}>
       <ThemedView style={styles.showAll}>
         <Button
           title={showAll ? "Show less" : "Show all"}
           onPress={handleShowAll}
+          testID={`${testID}${showAll ? "ShowLessCta" : "ShowAllCta"}`}
         />
       </ThemedView>
       {transactions
-        .map((transaction) => (
-          <TransactionItem key={transaction.id} {...transaction} />
+        .map((transaction, index) => (
+          <TransactionItem
+            {...transaction}
+            key={transaction.id}
+            testID={`#${index}TransactionCard`}
+          />
         ))
         .filter((_, index) => (showAll ? true : index < 3))}
     </ThemedView>
@@ -43,25 +56,63 @@ const TransactionItem = ({
   date,
   location,
   status,
-}: Transaction) => (
-  <ShadowedView style={styles.itemContainer}>
-    <ThemedView style={styles.row}>
-      <ThemedText>{merchant}</ThemedText>
-      <ThemedText>
-        {amount} {currency}
-      </ThemedText>
-    </ThemedView>
-    <Separator />
-    <ThemedView style={styles.row}>
-      <ThemedText>
-        {location}, {date}
-      </ThemedText>
-      <ThemedText>{status}</ThemedText>
-    </ThemedView>
-  </ShadowedView>
-);
+  testID = "",
+}: Transaction & { testID?: string }) => {
+  const colorScheme = useColorScheme() ?? "light";
+  const getStatusColor = () => {
+    switch (status) {
+      case "PENDING":
+        return Colors[colorScheme].warning;
+      case "SETTLED":
+        return Colors[colorScheme].success;
+    }
+  };
+  return (
+    <ShadowedView style={styles.itemContainer} testID={testID}>
+      <ThemedView style={styles.row}>
+        <ThemedText testID={`${testID}Merchant`}>{merchant}</ThemedText>
+        <ThemedText testID={`${testID}AmountAndCurrency`}>
+          {amount} {currency}
+        </ThemedText>
+      </ThemedView>
+      <Separator />
+      <ThemedView style={styles.row}>
+        <ThemedText testID={`${testID}LocationAndDate`}>
+          {location}, {date}
+        </ThemedText>
+        <ThemedText
+          style={[
+            styles.status,
+            {
+              backgroundColor: getStatusColor(),
+            },
+          ]}
+          testID={`${testID}Status`}
+        >
+          {status}
+        </ThemedText>
+      </ThemedView>
+    </ShadowedView>
+  );
+};
 
-const Separator = () => <ThemedView style={styles.separator} />;
+const Separator = () => {
+  const backgroundColor = useThemeColor(
+    { light: Colors["dark"].background, dark: Colors["light"].background },
+    "background",
+  );
+
+  return (
+    <ThemedView
+      style={[
+        styles.separator,
+        {
+          backgroundColor,
+        },
+      ]}
+    />
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -83,9 +134,13 @@ const styles = StyleSheet.create({
   },
   separator: {
     width: "100%",
-    marginVertical: 4,
-    backgroundColor: Colors.dark.background,
+    marginVertical: 8,
     height: 1,
     opacity: 0.1,
+  },
+  status: {
+    fontWeight: "bold",
+    paddingHorizontal: 8,
+    color: Colors.dark.tint,
   },
 });
